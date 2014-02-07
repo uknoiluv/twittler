@@ -3,25 +3,58 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
   </head>
   <body>
+
     <script>
 
-      $(document).ready(function(){
-        var $body = $('body');
+      $(document).ready(function(){        
+        var $body = $('.twittler');        
         $body.html('');
+        var index = streams.home.length;        
+        var msgArr;                                
+          
+          if(sessionStorage["msg"] === undefined){
+            msgArr = [];
+          }
+          else{
+            msgArr = JSON.parse(sessionStorage["msg"])
+          }                  
 
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
-        }
+          for(var i = 0; i < index ; i++){
+            var tweet = streams.home[i];
+            var timeFormat = tweet.created_at.toLocaleString();
+            var msg = '@' + tweet.user + ': ' + tweet.message + ' on ' + timeFormat;                            
+            msgArr.push(msg);
+          }
+
+          console.log(msgArr);
+
+          sessionStorage["msg"] = JSON.stringify(msgArr);                 
+
+        var msgIndex = msgArr.length - 1;
+
+          while(msgIndex >= 0){                  
+            var $tweet = $('<div></div>');
+            $tweet.text(msgArr[msgIndex]);
+            $tweet.appendTo($body);
+            msgIndex -= 1;
+          }        
 
       });
 
     </script>
+
+    <h2> twittler </h2>
+
+    <div class="twittler">
+    </div>
+
+    <div style="margin-top:30px">
+       <a href="JavaScript: location.reload(true);"> <button > display new tweets </button> </a>
+    </div>
+    
+
   </body>
 </html>
