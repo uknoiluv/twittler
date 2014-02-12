@@ -1,5 +1,25 @@
 
-div { 
-  background-color: grey ; 
-  
+
+.msg {
+	color: white;
+	background-color: #66CD00;	
+	width: 700px;
+	margin-left: 10px;
+	padding-left: 5px;
+}
+
+.user {
+	color: black;
+	background-color: #C1CDCD;
+	width: 120px;
+}
+
+.twittler div {
+	display: inline-block;
+	border-radius: 5px 5px 5px 5px;
+}
+
+p {
+    margin-top: 0.4em;
+    margin-bottom: 0em;
 }

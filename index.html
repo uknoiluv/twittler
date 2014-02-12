@@ -13,40 +13,78 @@
         var $body = $('.twittler');        
         $body.html('');
         var index = streams.home.length;        
+        var userArr;
         var msgArr;                                
           
-          if(sessionStorage["msg"] === undefined){
-            msgArr = [];
+          if(sessionStorage["user"] === undefined && sessionStorage["msg"] === undefined){          
+            userArr = [];
+            msgArr = [];            
           }
           else{
-            msgArr = JSON.parse(sessionStorage["msg"])
+            userArr = JSON.parse(sessionStorage["user"]);
+            msgArr = JSON.parse(sessionStorage["msg"]);            
           }                  
 
           for(var i = 0; i < index ; i++){
             var tweet = streams.home[i];
             var timeFormat = tweet.created_at.toLocaleString();
-            var msg = '@' + tweet.user + ': ' + tweet.message + ' on ' + timeFormat;                            
-            msgArr.push(msg);
+            var user = '@' + tweet.user;
+            var msg = ': ' + tweet.message + ' on ' + timeFormat;                                       
+            userArr.push(user);
+            msgArr.push(msg);    
+
           }
-
-          console.log(msgArr);
-
+          
+          sessionStorage["user"] = JSON.stringify(userArr);                 
           sessionStorage["msg"] = JSON.stringify(msgArr);                 
 
         var msgIndex = msgArr.length - 1;
 
-          while(msgIndex >= 0){                  
-            var $tweet = $('<div></div>');
-            $tweet.text(msgArr[msgIndex]);
-            $tweet.appendTo($body);
+          while(msgIndex >= 0){    
+            //var $msgline = $('<p></p>');  
+            var userArrId = userArr[msgIndex];
+            userArrId = userArrId.slice(1);
+
+            var $tweetMsg = $('<div class = ' + userArrId + '> </div>');
+            $tweetMsg.addClass('msg');
+            var $tweetUser = $('<div class = ' + userArrId + '> </div>');
+            $tweetUser.addClass('user');
+            $tweetMsg.text(msgArr[msgIndex]);
+            $tweetUser.text(userArr[msgIndex]);            
+            $tweetUser.appendTo($body);            
+            $tweetMsg.appendTo($body);
+            //$msgline.appendTo($body);                        
+            $('<p></p>').appendTo($body);                        
             msgIndex -= 1;
           }        
 
+
+          $('.user').click(function(){
+
+            var userClick = $(this).text();            
+            userClick = userClick.slice(1);
+            var $userClass = $("." + userClick);
+
+            $('.twittler div').hide();
+            $userClass.show();                                  
+            $('#help').text("click on username again to go back");
+            $userClass.click(function(){                       
+              $('.twittler div').show();
+              $('#help').text("");              
+            });
+
+          });
+
       });
+
 
     </script>
 
+    
     <h2> twittler </h2>
+ 
+    <span id = "help"></span>
+    <p></p>
 
     <div class="twittler">
     </div>
@@ -54,7 +92,8 @@
     <div style="margin-top:30px">
        <a href="JavaScript: location.reload(true);"> <button > display new tweets </button> </a>
     </div>
-    
+
+
 
   </body>
 </html>
